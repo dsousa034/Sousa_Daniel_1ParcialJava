@@ -7,7 +7,4 @@ public class BattleShip extends Barco{
     public BattleShip(TipoBarcos tipo, int numero, String nombre) {
         super(TipoBarcos.BATTLESHIP, numero, nombre);
     }
-
-
-
 }

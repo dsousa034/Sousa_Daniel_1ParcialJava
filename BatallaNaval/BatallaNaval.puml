@@ -1,0 +1,62 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+@startuml
+class Barco {
+    - tipo: TipoBarcos
+    - numero: int
+    - nombre: String
+    - impactos: boolean[]
+    + Barco(tipo: TipoBarcos, numero: int, nombre: String)
+    + estaHundido(): boolean
+    + impacto(posicion: int): void
+}
+
+class BattleShip {
+    - tamano: int = 5
+    + BattleShip(tipo: TipoBarcos, numero: int, nombre: String)
+}
+
+class Canoe {
+    - tamano: int = 1
+    + Canoe(tipo: TipoBarcos, numero: int, nombre: String)
+}
+
+class Frigate {
+    - tamano: int = 3
+    + Frigate(tipo: TipoBarcos, numero: int, nombre: String)
+}
+
+enum TipoBarcos {
+    BATTLESHIP
+    FRIGATE
+    CANOE
+}
+
+class TablasBarcos {
+    - tablaTipoBarco: Hashtable<TipoBarcos, Hashtable<Integer, Barco>>
+    - tablaNumeroBarco: Hashtable<Integer, Hashtable<Integer, Barco>>
+    - tablaNombreBarco: Hashtable<String, Hashtable<Integer, Barco>>
+    + TablasBarcos()
+    + hashTipoBarco(tipo: TipoBarcos): int
+    + hashNumeroBarco(numero: int): int
+    + hashNombreBarco(nombre: String): int
+    + agregarBarco(barco: Barco): void
+}
+
+class Tablero {
+    - filas: int = 4
+    - columnas: int = 4
+    - mar: char = '-'
+    - barco: char = 'B'
+    + inicializarTablero(tablero: char[][]): void
+    + mostrarTablero(tablero: char[][]): void
+    + main(args: String[]): void
+}
+
+Barco <|-- BattleShip
+Barco <|-- Canoe
+Barco <|-- Frigate
+Barco "1" *-- "1..3" TablasBarcos
+
+@enduml
