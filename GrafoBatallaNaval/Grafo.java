@@ -60,74 +60,60 @@ public class Grafo {
         Map<Puerto, Puerto> predecesor = new HashMap<>();
         PriorityQueue<Puerto> colaPrioridad = new PriorityQueue<>(Comparator.comparingInt(distancia::get));
 
-        //Inicializar las distancias
+        //Inicializar las distancias y predecesores
         for (Nodo nodo : nodos) {
             distancia.put((Puerto) nodo, Integer.MAX_VALUE);
             predecesor.put((Puerto) nodo, null);
         }
 
-        //Inicializar la distancia del nodo de inicio
+        //La distancia del nodo de inicio es 0
         distancia.put(inicio, 0);
         colaPrioridad.add(inicio);
 
         //Algoritmo de Dijkstra
-        //Mientras la cola de prioridad no este vacia
         while (!colaPrioridad.isEmpty()) {
-            //Saco de la cola el nodo con la menor distancia
             Puerto actual = colaPrioridad.poll();
-            //Si el nodo actual es el nodo destino, termino
             if (actual == destino) {
                 break;
             }
-            //Para cada vecino del nodo actual
             for (Arista arista : actual.getAristas()) {
                 Puerto vecino = (Puerto) arista.getDestino();
-                //La nuevaDistancia es la distancia del nodo actual mas la distancia de la arista
                 int nuevaDistancia = distancia.get(actual) + arista.getDistancia();
-                //Si la nuevaDistancia es menor a la distancia almacenada
                 if (nuevaDistancia < distancia.get(vecino)) {
-                    //La distancia del vecino desde el nodo de inicio es la nuevaDistancia
                     distancia.put(vecino, nuevaDistancia);
                     predecesor.put(vecino, actual);
-                    //Agrego el vecino a la cola de prioridad
                     colaPrioridad.add(vecino);
                 }
             }
         }
         List<Puerto> caminoOptimo = new ArrayList<>();
         Puerto nodo = destino;
-        //Recorro el predecesor desde el nodo destino hasta el nodo inicio y lo almaceno en un array
         while (nodo != null) {
             caminoOptimo.add(nodo);
             nodo = predecesor.get(nodo);
         }
-        //Le doy la vuelta al array para que quede en el orden correcto
         Collections.reverse(caminoOptimo);
         return caminoOptimo;
     }
 
-
-
-
+    //Opcion borrar puerto con mas aristas
     public boolean borrarPuertoConMasAristas(){
         int max = 0;
         Puerto puerto = null;
-        //Busco el puerto con mas aristas
+        //Buscamos el puerto con mas aristas
         for (Nodo n : nodos){
+            //Si el puerto tiene mas aristas que el maximo actual, lo guardamos
             if (n.getAristas().size() > max){
                 max = n.getAristas().size();
                 puerto = (Puerto) n;
             }
         }
-        //Si no habia ningun puerto con aristas, retorno false
+        //Si encontramos un puerto con aristas, lo borramos
         if (puerto != null){
-            //Borro el puerto con mas aristas de mi grafo/lista de nodos
             nodos.remove(puerto);
-            //Busco en cada nodo si hay aristas que tengan como destino el puerto que quiero borrar
             for (Nodo n : nodos){
-                //Busco en cada arista del nodo si el destino es el puerto que quiero borrar
+                //Buscamos las aristas que apuntan al puerto
                 for (Arista a : n.getAristas()){
-                    //Si el destino es el puerto que quiero borrar, borro la arista
                     if (a.getDestino().equals(puerto)){
                         n.getAristas().remove(a);
                     }
